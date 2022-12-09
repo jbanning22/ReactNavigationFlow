@@ -6,31 +6,40 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, StackActions} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 
-function HomeScreen({navigation}) {
+function LandingScreen({navigation}) {
   const [loginText, setLoginText] = useState();
   return (
     <View style={styles.box1}>
-      <Text style={styles.homeText}>Home</Text>
+      <Text style={styles.homeText}>Welcome!</Text>
       <TouchableOpacity
         style={styles.loginButton}
-        onPress={() => navigation.navigate('LoginPage')}>
-        <Text style={{fontSize: 18, color: 'white'}}>Log In</Text>
+        onPress={() => navigation.navigate('SignInPage')}>
+        <Text style={{fontSize: 18, color: 'white'}}>Sign In</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.signUpButton}
         onPress={() => navigation.navigate('SignUpPage')}>
         <Text style={{fontSize: 18, color: 'black'}}>Sign Up</Text>
       </TouchableOpacity>
+      {/* <Button title="Details" onPress={() => navigation.navigate('Details')} /> */}
+    </View>
+  );
+}
+
+function HomeScreen({navigation}) {
+  return (
+    <View style={styles.box1}>
+      <Text style={styles.homeText}>App Home Page</Text>
       <Button title="Details" onPress={() => navigation.navigate('Details')} />
     </View>
   );
 }
 
-function LoginScreen({navigation}) {
+function SignInScreen({navigation}) {
   const [usernameText, setUsernameText] = useState();
   const [passwordText, setPasswordText] = useState();
   return (
@@ -48,13 +57,12 @@ function LoginScreen({navigation}) {
         value={passwordText}
         onChangeText={setPasswordText}
       />
-      <TouchableOpacity style={styles.loginButton}>
+      <TouchableOpacity
+        style={styles.loginButton}
+        onPress={() => navigation.navigate('Home')}>
         <Text style={{fontSize: 18, color: 'white'}}>Log in</Text>
       </TouchableOpacity>
-      <Button
-        title="Back to Home"
-        onPress={() => navigation.navigate('Home')}
-      />
+      <Button title="Back" onPress={() => navigation.navigate('Home')} />
     </View>
   );
 }
@@ -80,10 +88,7 @@ function SignUpScreen({navigation}) {
       <TouchableOpacity style={styles.signUpButton}>
         <Text style={{fontSize: 18, color: 'white'}}>Log in</Text>
       </TouchableOpacity>
-      <Button
-        title="Back to Home"
-        onPress={() => navigation.navigate('Home')}
-      />
+      <Button title="Back" onPress={() => navigation.navigate('Home')} />
     </View>
   );
 }
@@ -110,62 +115,83 @@ function DetailsScreen({navigation}) {
     </View>
   );
 }
+const AuthStack = createNativeStackNavigator();
 
+const AuthStackScreen = () => (
+  <AuthStack.Navigator initialRouteName="Landing">
+    <AuthStack.Screen
+      name="Landing"
+      component={LandingScreen}
+      options={{
+        title: 'Get Started',
+        headerStyle: {
+          backgroundColor: 'red',
+        },
+        headerTintColor: 'black',
+      }}
+    />
+    <AuthStack.Screen
+      name="SignInPage"
+      component={SignInScreen}
+      options={{
+        title: 'Login',
+        headerStyle: {
+          backgroundColor: 'green',
+        },
+        headerTintColor: 'white',
+      }}
+    />
+    <AuthStack.Screen
+      name="SignUpPage"
+      component={SignUpScreen}
+      options={{
+        title: 'SignUp',
+        headerStyle: {
+          backgroundColor: 'orange',
+        },
+        headerTintColor: 'black',
+      }}
+    />
+  </AuthStack.Navigator>
+);
+
+const AppStack = createNativeStackNavigator();
+
+const AppStackScreen = () => (
+  <AppStack.Navigator>
+    <AppStack.Screen
+      name="Home"
+      component={HomeScreen}
+      options={{
+        title: 'Home',
+        headerStyle: {backgroundColor: 'blue'},
+        headerTintColor: 'white',
+      }}
+    />
+    <AppStack.Screen
+      name="Details"
+      component={DetailsScreen}
+      options={{
+        title: 'Details',
+        headerStyle: {
+          backgroundColor: 'blue',
+        },
+        headerTintColor: 'white',
+      }}
+    />
+  </AppStack.Navigator>
+);
 const App = () => {
+  const [isLoading, setIsLoading] = useState(false);
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{
-            title: 'Get Started',
-            headerStyle: {
-              backgroundColor: 'red',
-            },
-            headerTintColor: 'black',
-          }}
-        />
-        <Stack.Screen
-          name="LoginPage"
-          component={LoginScreen}
-          options={{
-            title: 'Login',
-            headerStyle: {
-              backgroundColor: 'green',
-            },
-            headerTintColor: 'white',
-          }}
-        />
-        <Stack.Screen
-          name="SignUpPage"
-          component={SignUpScreen}
-          options={{
-            title: 'SignUp',
-            headerStyle: {
-              backgroundColor: 'orange',
-            },
-            headerTintColor: 'black',
-          }}
-        />
-        <Stack.Screen
-          name="Details"
-          component={DetailsScreen}
-          options={{
-            title: 'Details',
-            headerStyle: {
-              backgroundColor: 'blue',
-            },
-            headerTintColor: 'white',
-          }}
-        />
-      </Stack.Navigator>
+      <AuthStackScreen />
+      <AppStackScreen />
     </NavigationContainer>
   );
 };
 
 export default App;
-const Stack = createNativeStackNavigator();
 
 const styles = StyleSheet.create({
   box1: {

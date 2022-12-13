@@ -47,7 +47,7 @@ const SignUpScreen = ({navigation}) => {
       <TouchableOpacity style={styles.signUpButton} onPress={registerUser}>
         <Text style={styles.textButton}>Sign Up</Text>
       </TouchableOpacity>
-      <Button title="Back" onPress={() => navigation.navigate('Home')} />
+      <Button title="Back" onPress={() => navigation.navigate('Landing')} />
     </View>
   );
 };

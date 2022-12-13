@@ -47,7 +47,7 @@ const SignInScreen = ({navigation}) => {
       <TouchableOpacity style={styles.loginButton} onPress={signInUser}>
         <Text style={styles.textButton}>Log in</Text>
       </TouchableOpacity>
-      <Button title="Back" onPress={() => navigation.navigate('Home')} />
+      <Button title="Back" onPress={() => navigation.navigate('Landing')} />
     </View>
   );
 };
